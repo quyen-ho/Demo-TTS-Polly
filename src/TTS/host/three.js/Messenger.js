@@ -1,6 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-import CoreMessenger from 'core/Messenger';
+import CoreMessenger from "../core/Messenger";
+import * as THREE from "three";
 
 /**
  * @extends core/Messenger
@@ -19,18 +20,18 @@ class Messenger extends CoreMessenger {
   }
 
   _createEvent(message, value) {
-    return {detail: value, type: message};
+    return { detail: value, type: message };
   }
 }
 
 // Assign Three.js EventDispatcher functionality to the Messenger class
 Object.getOwnPropertyNames(THREE.EventDispatcher.prototype)
-  .filter(prop => prop !== 'constructor')
-  .forEach(prop => {
+  .filter((prop) => prop !== "constructor")
+  .forEach((prop) => {
     Messenger.prototype[prop] = THREE.EventDispatcher.prototype[prop];
   });
 
-Object.defineProperty(Messenger, 'GlobalMessenger', {
+Object.defineProperty(Messenger, "GlobalMessenger", {
   value: new Messenger(),
   writable: false,
 });

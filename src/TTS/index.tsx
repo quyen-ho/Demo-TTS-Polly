@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import AWS from "aws-sdk";
 import { createScene, loadCharacter } from './loader/loader'
 import { createHost, initializeUX } from "./helpers";
-import HOST from "./host/threeAzure";
+import HOST from "./host/three.js";
 
 
 const ServiceKey = "";
@@ -15,11 +16,28 @@ const speakers = new Map<string, HOST.HostObject>([
 ]);
 
 
-const initSpeech = async () => {
-  await HOST.aws.TextToSpeechFeature.initializeForAzure(ServiceKey, ServiceRegion);  
-}
 
-const main = async () => {
+
+const main = async () => {  
+   window.AWS.config.region = 'us-east-1';
+  window.AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-east-1:919ea36c-ee5b-4152-a381-e055dc486511',
+  });
+  // window.AWS.config.userPoolId = 'us-east-1_ldSBpn6FW'
+  // window.AWS.config.userPoolWebClientId = '2naj2dc7olq7qb6vqk7s69cb28'
+  const polly = new AWS.Polly();
+  const presigner = new AWS.Polly.Presigner();
+  console.log('presigner: ', presigner);
+  
+  const initSpeech = async () => {
+    
+    HOST.aws.TextToSpeechFeature.initializeService(
+      polly,
+      presigner,
+      window.AWS.VERSION
+      );
+  }
+
 
   const { scene, camera, clock } = createScene(renderFn);
 

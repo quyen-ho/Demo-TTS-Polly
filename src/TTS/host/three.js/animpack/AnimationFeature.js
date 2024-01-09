@@ -1,9 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
+import * as THREE from "three";
 import CoreAnimationFeature, {
   AnimationTypes,
-} from 'core/animpack/AnimationFeature';
-import SingleState from './state/SingleState';
+} from "../../core/animpack/AnimationFeature";
+import SingleState from "./state/SingleState";
 
 /**
  * Threejs AnimationMixer object
@@ -11,7 +12,7 @@ import SingleState from './state/SingleState';
  * @see https://threejs.org/docs/#api/en/animation/AnimationMixer
  */
 AnimationTypes.single = SingleState;
-export {AnimationTypes};
+export { AnimationTypes };
 
 /**
  * @extends core/AnimationFeature
@@ -31,7 +32,7 @@ class AnimationFeature extends CoreAnimationFeature {
 
   _createSingleState(options) {
     // Duplicate the clip if it is already in use by another three action
-    let {clip} = options;
+    let { clip } = options;
     if (this._mixer.existingAction(clip)) {
       clip = clip.clone();
     }

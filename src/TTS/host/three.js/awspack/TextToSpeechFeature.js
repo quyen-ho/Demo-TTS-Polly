@@ -1,6 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-import CoreTextToSpeechFeature from 'core/awspack/TextToSpeechFeature';
+import CoreTextToSpeechFeature from "../../core/awspack/TextToSpeechFeature";
+import * as THREE from "three";
 
 /**
  * Threejs PositionalAudio object
@@ -35,7 +36,7 @@ class TextToSpeechFeature extends CoreTextToSpeechFeature {
       voice: undefined,
       engine: undefined,
       language: undefined,
-      audioFormat: 'mp3',
+      audioFormat: "mp3",
       sampleRate: undefined,
       listener: undefined,
       attachTo: undefined,
@@ -66,7 +67,7 @@ class TextToSpeechFeature extends CoreTextToSpeechFeature {
    * objects.
    */
   _synthesizeAudio(params) {
-    return super._synthesizeAudio(params).then(result => {
+    return super._synthesizeAudio(params).then((result) => {
       if (this._attachTo !== undefined && !this._isGlobal) {
         // Create positional audio if there's an attach point
         result.threeAudio = new THREE.PositionalAudio(this._listener);

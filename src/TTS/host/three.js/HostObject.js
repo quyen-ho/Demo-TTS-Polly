@@ -8,7 +8,7 @@
  * @see https://threejs.org/docs/#api/en/core/Clock
  */
 
-import CoreHostObject from 'core/HostObject';
+import CoreHostObject from "../core/HostObject";
 
 /**
  * @alias three.js/HostObject
@@ -28,7 +28,7 @@ class HostObject extends CoreHostObject {
     this._clock = options.clock;
 
     if (this._clock) {
-      Object.defineProperty(this, 'now', {
+      Object.defineProperty(this, "now", {
         get: () => {
           return this._clock.getElapsedTime() * 1000;
         },

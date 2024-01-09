@@ -5,18 +5,18 @@
  * @module three/HOST
  */
 
-import Utils from 'core/Utils';
-import MathUtils from 'core/MathUtils';
-import Deferred from 'core/Deferred';
-import LipsyncFeature, {DefaultVisemeMap} from 'core/LipsyncFeature';
-import GestureFeature, {DefaultGestureWords} from 'core/GestureFeature';
-import PointOfInterestFeature, {AxisMap} from './PointOfInterestFeature';
-import {env} from './HostEnvironment';
-import Messenger from './Messenger';
-import HostObject from './HostObject';
+import Utils from "../core/Utils";
+import MathUtils from "../core/MathUtils";
+import Deferred from "../core/Deferred";
+import LipsyncFeature, { DefaultVisemeMap } from "../core/LipsyncFeature";
+import GestureFeature, { DefaultGestureWords } from "../core/GestureFeature";
+import PointOfInterestFeature, { AxisMap } from "./PointOfInterestFeature";
+import { env } from "./HostEnvironment";
+import Messenger from "./Messenger";
+import HostObject from "./HostObject";
 
-import aws from './awspack';
-import anim from './animpack';
+import aws from "./awspack";
+import anim from "./animpack";
 
 export default {
   /**

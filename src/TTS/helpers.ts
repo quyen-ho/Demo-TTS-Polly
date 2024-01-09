@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import HOST from './host/threeAzure';
+import HOST from './host/three.js';
 
 interface IVoice {
     regionCode: string;
@@ -397,6 +397,15 @@ export const initializeUX =  (speakers: Map<string, HOST.HostObject>) => {
         Responses data need to mapping with blendshape keys of Model glb(Ready player me) by name 
         `;
 
+        try {
+            host.TextToSpeechFeature.play(speechInput)
+        } catch (error) {
+            console.log('error: ', error);
+            
+        }
+
+        
+        
         host.TextToSpeechFeature[id](speechInput);
       };
     });

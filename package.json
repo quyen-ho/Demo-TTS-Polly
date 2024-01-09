@@ -8,8 +8,6 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.68",
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.17",
     "aws-sdk": "^2.1532.0",
     "axios": "^1.6.2",
     "compare-versions": "^6.0.0-rc.1",
@@ -19,7 +17,6 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "three": "^0.127.0",
-    "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -47,6 +44,9 @@
     ]
   },
   "devDependencies": {
-    "@types/three": "^0.127.0"
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
+    "@types/three": "^0.127.0",
+    "typescript": "^5.3.3"
   }
 }

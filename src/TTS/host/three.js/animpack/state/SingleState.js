@@ -1,7 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-import CoreSingleState from 'core/animpack/state/SingleState';
-import MathUtils from 'core/MathUtils';
+import * as THREE from "three";
+import CoreSingleState from "../../../core/animpack/state/SingleState";
+import MathUtils from "../../../core/MathUtils";
 
 /**
  * Threejs AnimationAction object
@@ -30,9 +31,9 @@ class SingleState extends CoreSingleState {
     super(options);
 
     // Callback to catch THREE animation action completion
-    this._onFinishedEvent = ({type, action}) => {
+    this._onFinishedEvent = ({ type, action }) => {
       // Exit if this isn't the finish event for this animation
-      if (type !== 'finished' || action !== this.threeAction) {
+      if (type !== "finished" || action !== this.threeAction) {
         return;
       }
 
@@ -58,7 +59,7 @@ class SingleState extends CoreSingleState {
     // Start listening for animation finished events
     this._threeAction
       .getMixer()
-      .addEventListener('finished', this._onFinishedEvent);
+      .addEventListener("finished", this._onFinishedEvent);
   }
 
   /**
@@ -72,8 +73,12 @@ class SingleState extends CoreSingleState {
   }
 
   get normalizedTime() {
-    if (this._threeAction.time && this._threeAction.getClip() && this._threeAction.getClip().duration) {
-      return this._threeAction.time/this._threeAction.getClip().duration;
+    if (
+      this._threeAction.time &&
+      this._threeAction.getClip() &&
+      this._threeAction.getClip().duration
+    ) {
+      return this._threeAction.time / this._threeAction.getClip().duration;
     }
     return 0;
   }
@@ -169,7 +174,7 @@ class SingleState extends CoreSingleState {
     // Stop listening for finish events
     this._threeAction
       .getMixer()
-      .removeEventListener('finished', this._onFinishedEvent);
+      .removeEventListener("finished", this._onFinishedEvent);
 
     super.discard();
   }
