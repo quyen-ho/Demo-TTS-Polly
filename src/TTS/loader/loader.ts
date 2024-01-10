@@ -10,16 +10,19 @@ export const createScene = (renderFn: any[]) => {
     const clock = new THREE.Clock();
     scene.background = new THREE.Color(0x33334d);
     scene.fog = new THREE.Fog(0x33334d, 0, 10);
+    const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
 
     // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.shadowMap.enabled = true;
     renderer.setClearColor(0x33334d);
-    renderer.domElement.id = 'renderCanvas';
-    document.body.appendChild(renderer.domElement);
+    // renderer.domElement.id = 'renderCanvas';
+    // document.body.appendChild(renderer.domElement);
 
     // Env map
     new THREE.TextureLoader()

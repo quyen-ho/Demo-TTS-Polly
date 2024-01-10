@@ -14,11 +14,10 @@ import PointOfInterestFeature, { AxisMap } from "./PointOfInterestFeature";
 import { env } from "./HostEnvironment";
 import Messenger from "./Messenger";
 import HostObject from "./HostObject";
-
 import aws from "./awspack";
 import anim from "./animpack";
 
-export default {
+const HOST = {
   /**
    * @see env
    */
@@ -76,3 +75,5 @@ export default {
    */
   anim,
 };
+
+export default HOST;

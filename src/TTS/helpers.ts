@@ -1,22 +1,18 @@
 import * as THREE from 'three'
 import HOST from './host/three.js';
-
-interface IVoice {
-    regionCode: string;
-    name: string;
-}
+import HostObject from './host/three.js/HostObject.js';
 
 interface ICreateHost {
     renderFn: any[]
     character: THREE.Group;
     audioAttachJoint: THREE.Object3D | undefined;
-    voice: IVoice,
+    voice: string,
     engine: string;
     idleClip: THREE.AnimationClip;
     faceIdleClip: THREE.AnimationClip;
     lipsyncClips: THREE.AnimationClip[];
     gestureClips: THREE.AnimationClip[];
-    gestureConfig: object;
+    gestureConfig: any;
     emoteClips: THREE.AnimationClip[];
     blinkClips: THREE.AnimationClip[];
     poiClips: THREE.AnimationClip[];
@@ -51,17 +47,17 @@ export const createHost = (
     scene
     } : ICreateHost
 ) => {
-    const host = new HOST.HostObject({ owner: character, clock });
+    const host: any = new HostObject({ owner: character, clock });
     
     renderFn.push(() => {
         host.update();
-        if (host.visemeHandler) {
-            host.visemeHandler.CheckForViseme();
-        }
     });
 
     const audioListener = new THREE.AudioListener();
     camera.add(audioListener);
+    
+    audioListener.setMasterVolume(6)
+    
     host.addFeature(HOST.aws.TextToSpeechFeature, false, {
         listener: audioListener,
         attachTo: audioAttachJoint,
@@ -134,9 +130,9 @@ export const createHost = (
         blendMode: HOST.anim.LayerBlendModes.Additive,
     });
     host.AnimationFeature.setLayerWeight('Talk', 0);
-    const talkClip = lipsyncClips.find(c => c.name === 'stand_talk');
+    const talkClip = lipsyncClips.find(c => c.name === 'stand_talk') as THREE.AnimationClip;
     lipsyncClips.splice(lipsyncClips.indexOf(talkClip), 1);
-    host.AnimationFeature.addAnimation(
+    host.AnimationFeature.addAnimation( 
         'Talk',
         talkClip.name,
         HOST.anim.AnimationTypes.single,
@@ -151,11 +147,14 @@ export const createHost = (
     });
     gestureClips.forEach(clip => {
         const { name } = clip;
+        
         const config = gestureConfig[name];
         THREE.AnimationUtils.makeClipAdditive(clip);
 
-        if (config !== undefined) {
-            config.queueOptions.forEach((option, index) => {
+        if (config !== undefined) {            
+            config.queueOptions.forEach((option: any) => {
+                console.log('option: ', option);
+                
                 // Create a subclip for each range in queueOptions
                 option.clip = THREE.AnimationUtils.subclip(
                     clip,
@@ -203,7 +202,7 @@ export const createHost = (
     });
     host.AnimationFeature.setLayerWeight('Viseme', 0);
 
-    window.lipsyncClips = lipsyncClips;
+    // window.lipsyncClips = lipsyncClips;
 
     // Slice off the reference frame
     const blendStateOptions = lipsyncClips.map(clip => {
@@ -225,14 +224,16 @@ export const createHost = (
     host.AnimationFeature.playAnimation('Viseme', 'visemes');
 
     // POI poses
-    poiConfig.forEach(config => {
+    poiConfig.forEach((config: any) => {
         host.AnimationFeature.addLayer(config.name, {
             blendMode: HOST.anim.LayerBlendModes.Additive,
         });
 
         // Find each pose clip and make it additive
-        config.blendStateOptions.forEach(clipConfig => {
-            const clip = poiClips.find(clip => clip.name === clipConfig.clip);
+        config.blendStateOptions.forEach((clipConfig: any) => {
+            console.log('clipConfig: ', clipConfig);
+            
+            const clip = poiClips.find(clip => clip.name === clipConfig.clip) as THREE.AnimationClip ;
             THREE.AnimationUtils.makeClipAdditive(clip);
             clipConfig.clip = THREE.AnimationUtils.subclip(
                 clip,
@@ -341,73 +342,3 @@ export const createHost = (
 
     return host;
 }
-
-const enableDragDrop = (className: string) => {
-    const elements = document.getElementsByClassName(className);
-
-    for (let i = 0, l = elements.length; i < l; i += 1) {
-      const dropArea = elements[i];
-
-      // Copy contents of files into the text input once they are read
-      const fileReader = new FileReader();
-      fileReader.onload = evt => {
-        dropArea.value = evt.target.result;
-      };
-
-      // Drag and drop listeners
-      dropArea.addEventListener('dragover', evt => {
-        evt.stopPropagation();
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'copy';
-      });
-
-      dropArea.addEventListener('drop', evt => {
-        evt.stopPropagation();
-        evt.preventDefault();
-
-        // Read the first file that was dropped
-        const [file] = evt.dataTransfer.files;
-        fileReader.readAsText(file, 'UTF-8');
-      });
-    }
-  }
-
-  function getCurrentHost(speakers: Map<string, HOST.HostObject>) {
-
-    return {name: "Luke", host: speakers.get("Luke")};
-  }
-
-export const initializeUX =  (speakers: Map<string, HOST.HostObject>) => {
-    // Enable drag/drop text files on the speech text area
-    enableDragDrop('textEntry');
-
-    // Connect tab buttons to hosts
-    Array.from(document.getElementsByClassName('tab')).forEach(tab => {
-      tab.onclick = evt => { toggleHost(evt); }
-    });
-
-    // Play, pause, resume and stop the contents of the text input as speech
-    // when buttons are clicked
-    ['play'].forEach(id => {
-      const button = document.getElementById(id) as HTMLElement ;
-      button.onclick = () => {
-        const {name, host} = getCurrentHost(speakers);        
-        const speechInput = `Most of the consonant visemes are not properly captured. All the "p", "b", "n", "m" etc sounds where the lips are supposed to touch dont have a good representation in the viseme data.
-        Some values are way too high or too low throughout the whole list of viseme events, resulting in an animation with less realistic.
-        Responses data need to mapping with blendshape keys of Model glb(Ready player me) by name 
-        `;
-
-        try {
-            host.TextToSpeechFeature.play(speechInput)
-        } catch (error) {
-            console.log('error: ', error);
-            
-        }
-
-        
-        
-        host.TextToSpeechFeature[id](speechInput);
-      };
-    });
-
-  }
