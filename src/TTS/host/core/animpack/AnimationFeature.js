@@ -958,28 +958,57 @@ class AnimationFeature extends AbstractHostFeature {
     animationType = AnimationTypes.single,
     options = {}
   ) {
-    options.name = this._validateNewAnimation(layerName, animationName);
+    const buildMaping = {
+      am: "SingleState",
+      Pc: "RandomAnimationState",
+      Sc: "QueueState",
+      Tc: "FreeBlendState",
+      Cc: "Blend2dState",
+    };
+    const mapName = (shortName) => buildMaping[shortName];
+    // options.name = this._validateNewAnimation(layerName, animationName);
+    // // Make sure the animation type is valid
+    // if (!Object.values(AnimationTypes).includes(animationType)) {
+    //   throw new Error(
+    //     `Cannot add animation ${animationName} to layer ${layerName} on host ${this._host.id}. Invalid animation type.`
+    //   );
+    // }
+    // const layer = this._layerMap[layerName];
+    // options.blendMode = layer.blendMode;
+    // options.transitionTime = layer.transitionTime;
+    // const funcName = this[`_create${animationType.name}`]
+    //   ? this[`_create${animationType.name}`]
+    //   : this[`_create${mapName(animationType.name)}`];
+    // console.log("funcName: ", funcName.name);
+    // const state = funcName(options);
+    // const name = layer.addState(state);
+    // // Notify that an animation has been added to the feature
+    // this.emit(this.constructor.EVENTS.addAnimation, {
+    //   layerName,
+    //   animationName: name,
+    // });
+    // return name;
 
+    options.name = this._validateNewAnimation(layerName, animationName);
     // Make sure the animation type is valid
     if (!Object.values(AnimationTypes).includes(animationType)) {
       throw new Error(
         `Cannot add animation ${animationName} to layer ${layerName} on host ${this._host.id}. Invalid animation type.`
       );
     }
-
     const layer = this._layerMap[layerName];
     options.blendMode = layer.blendMode;
     options.transitionTime = layer.transitionTime;
-    const state = this[`_create${animationType.name}`](options);
-
+    const state = this[`_create${animationType.name}`]
+      ? this[`_create${animationType.name}`](options)
+      : this[`_create${mapName(animationType.name)}`](options);
+    // const state = this[`_create${animationType.name}`](options);
     const name = layer.addState(state);
-
     // Notify that an animation has been added to the feature
     this.emit(this.constructor.EVENTS.addAnimation, {
       layerName,
       animationName: name,
     });
-
     return name;
   }
 
