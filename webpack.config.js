@@ -18,7 +18,7 @@ module.exports = {
     }),
   ],
   output: {
-    filename: "bundle.js",
+    filename: "bundle.[name].[chunkhash:16].js",
     path: path.resolve(__dirname, "dist"),
   },
   resolve: {

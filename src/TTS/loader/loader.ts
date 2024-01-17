@@ -44,11 +44,11 @@ export const createScene = (renderFn: any[]) => {
     0.1,
     1000
   );
-  const controls = new OrbitControls(camera, renderer.domElement);
-  camera.position.set(0, 1.4, 3.1);
-  controls.target = new THREE.Vector3(0, 0.8, 0);
-  controls.screenSpacePanning = true;
-  controls.update();
+  // const controls = new OrbitControls(camera, renderer.domElement);
+  camera.position.set(0, 1.2, 2.2);
+  // controls.target = new THREE.Vector3(0, 1.2, 0);
+  // controls.screenSpacePanning = true;
+  // controls.update();
 
   // Handle window resize
   function onWindowResize() {
@@ -61,7 +61,7 @@ export const createScene = (renderFn: any[]) => {
   // Render loop
   function render() {
     requestAnimationFrame(render);
-    controls.update();
+    // controls.update();
 
     renderFn.forEach((fn) => {
       fn();
